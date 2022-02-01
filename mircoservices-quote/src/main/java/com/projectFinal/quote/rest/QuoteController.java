@@ -1,5 +1,8 @@
 package com.projectFinal.quote.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projectFinal.quote.Entity.Quote;
+import com.projectFinal.quote.EntityResponse.QuoteResponse;
+import com.projectFinal.quote.Repository.MessageRepository;
 import com.projectFinal.quote.Repository.QuoteRepository;
 
 @RestController
@@ -21,6 +26,8 @@ public class QuoteController {
 	
 	@Autowired
 	QuoteRepository quoteRepository;
+	@Autowired
+	MessageRepository messageRepository;
 	
 	@PostMapping("/")
 	public ResponseEntity<Quote> addQuote (@RequestBody Quote quote) {
@@ -32,17 +39,34 @@ public class QuoteController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<Iterable<Quote>> getQuotes(@RequestParam(value="authorName", required = false) String authorName) {
+	public ResponseEntity<List<QuoteResponse>> getQuotes(@RequestParam(value="authorName", required = false) String authorName) {
+		List<QuoteResponse> quoteResponses = new ArrayList<QuoteResponse>();
+		List<Quote> quotes;
+		
 		if( authorName == null || authorName == "") {
-			//TODO: retrouner aussi les messages des quotes
-			return ResponseEntity.ok(quoteRepository.findAll());			
+			quotes = quoteRepository.findAll();		
+		}else {
+			quotes = quoteRepository.findByAuthorName(authorName);
 		}
-		//TODO: retrouner aussi les messages des quotes
-		return ResponseEntity.ok(quoteRepository.findByAuthorName(authorName));
+		
+		for(Quote quote : quotes ) {
+			QuoteResponse quoteResponse = new QuoteResponse();
+			
+			quoteResponse.id = quote.id;
+			quoteResponse.authorName = quote.authorName;
+			quoteResponse.disliked = quote.disliked;
+			quoteResponse.liked = quote.liked;
+			quoteResponse.title = quote.title;
+			quoteResponse.listMessage = messageRepository.findByQuoteId(quote.id);
+			
+			quoteResponses.add(quoteResponse);
+		}
+		
+		return ResponseEntity.ok(quoteResponses);
 	}
 	
 	@DeleteMapping("/{quoteId}")
-	public Integer deleteAuthors(@PathVariable("quoteId") Integer quoteId) {
+	public Integer deleteQuote(@PathVariable("quoteId") Integer quoteId) {
 		quoteRepository.deleteById(quoteId);
 		return quoteId;
 	}
@@ -64,9 +88,26 @@ public class QuoteController {
 	}
 	
 	
-	  @GetMapping("/topquote") public ResponseEntity<Iterable<Quote>> getTopQuote()
-	  { 
-		  return ResponseEntity.ok(quoteRepository.findAllOrderByLikedAsc());
+	  @GetMapping("/topquote") 
+	  public ResponseEntity<List<QuoteResponse>> getTopQuote() { 
+		  List<QuoteResponse> quoteResponses = new ArrayList<QuoteResponse>();
+		  List<Quote> quotes;
+		  quotes = quoteRepository.findAllOrderByLikedAsc();
+		  for(Quote quote : quotes ) {
+			  
+			  QuoteResponse quoteResponse = new QuoteResponse();
+				
+			  quoteResponse.id = quote.id;
+			  quoteResponse.authorName = quote.authorName;
+			  quoteResponse.disliked = quote.disliked;
+			  quoteResponse.liked = quote.liked;
+			  quoteResponse.title = quote.title;
+			  quoteResponse.listMessage = messageRepository.findByQuoteId(quote.id);
+			
+			  quoteResponses.add(quoteResponse);
+		  }
+			
+		return ResponseEntity.ok(quoteResponses); 
 	  }
 	 
 

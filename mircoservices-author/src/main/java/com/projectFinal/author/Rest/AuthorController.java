@@ -31,11 +31,8 @@ public class AuthorController {
 	@GetMapping("/")
 	public ResponseEntity<Iterable<Author>> getAuthors(@RequestParam(value="pseudo",required= false) String pseudo) {
 		if(pseudo == null || pseudo == "") {
-			//TODO: Ajouter les quotes lié a l'auteur
 			return ResponseEntity.ok(authorRepository.findAll());
 		}
-		
-		//TODO: Ajouter les quotes lié a l'auteur
 		return ResponseEntity.ok(authorRepository.findByPseudo(pseudo));
 	}
 	
@@ -44,6 +41,5 @@ public class AuthorController {
 		authorRepository.deleteById(authorId);
 		return authorId;
 	}
-	//TODO: Faire le ratio des like / dislike
 	
 }

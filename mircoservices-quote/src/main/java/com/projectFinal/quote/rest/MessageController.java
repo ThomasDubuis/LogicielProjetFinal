@@ -23,13 +23,13 @@ public class MessageController {
 	MessageRepository messageRepository;
 	
 	@PostMapping("/")
-	public ResponseEntity<Message> addQuote (@RequestBody Message message) {
+	public ResponseEntity<Message> addMessage (@RequestBody Message message) {
 		messageRepository.save(message);
 		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<Iterable<Message>> getQuotes(@RequestParam(value="quoteId", required = false) Integer quoteId) {
+	public ResponseEntity<Iterable<Message>> getMessages(@RequestParam(value="quoteId", required = false) Integer quoteId) {
 		if( quoteId == null) {
 			return ResponseEntity.ok(messageRepository.findAll());			
 		}
@@ -37,7 +37,7 @@ public class MessageController {
 	}
 	
 	@DeleteMapping("/{messageId}")
-	public Integer deleteAuthors(@PathVariable("messageId") Integer messageId) {
+	public Integer deleteMessage(@PathVariable("messageId") Integer messageId) {
 		messageRepository.deleteById(messageId);
 		return messageId;
 	}
