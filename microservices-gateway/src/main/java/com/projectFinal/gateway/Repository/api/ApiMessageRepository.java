@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.projectFinal.gateway.Entity.Message;
 import com.projectFinal.gateway.Repository.MessageRepository;
 
-@FeignClient(url = "http://localhost:8092/api/message", name = "message-api")
+@FeignClient(url = "${feign.messageServiceURL}/api/message", name = "message-api")
 public interface ApiMessageRepository extends MessageRepository{
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json")

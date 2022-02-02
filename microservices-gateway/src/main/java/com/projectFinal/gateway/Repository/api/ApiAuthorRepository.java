@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.projectFinal.gateway.Entity.Author;
 import com.projectFinal.gateway.Repository.AuthorRepository;
 
-@FeignClient(url = "http://localhost:8091/api/author", name = "authors-api")
+@FeignClient(url = "${feign.authorServiceURL}/api/author", name = "authors-api")
 public interface ApiAuthorRepository extends AuthorRepository {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json")

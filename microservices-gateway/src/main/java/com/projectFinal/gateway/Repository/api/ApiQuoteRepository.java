@@ -13,7 +13,7 @@ import com.projectFinal.gateway.Entity.Quote;
 import com.projectFinal.gateway.Entity.QuoteResponse;
 import com.projectFinal.gateway.Repository.QuoteRepository;
 
-@FeignClient(url = "http://localhost:8092/api/quote", name = "quote-api")
+@FeignClient(url = "${feign.quoteServiceURL}/api/quote", name = "quote-api")
 public interface ApiQuoteRepository extends QuoteRepository{
 
 	@RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json")
