@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dubuis</groupId>
-	<artifactId>mircoservices-author</artifactId>
+	<artifactId>mircoservices-quote</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mircoservices-author</name>
+	<name>mircoservices-quote</name>
 	<description>Project Final Microservices Author</description>
 	<properties>
 		<java.version>11</java.version>
@@ -44,6 +44,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+		        <groupId>com.google.cloud.tools</groupId>
+		        <artifactId>jib-maven-plugin</artifactId>
+		        <version>3.2.0</version>
+		        <configuration>
+		          <to>
+		            <image>logiciel/microservices-quote</image>
+		            <tags>
+		            	<tag>latest</tag>
+		            </tags>
+		          </to>
+		        </configuration>
+		    </plugin>
 		</plugins>
 	</build>
 
